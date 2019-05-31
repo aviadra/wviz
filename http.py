@@ -1,6 +1,8 @@
 import argparse
 import http.server
 import os
+import imghdr
+
 
 class HTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
     def do_PUT(self):
@@ -16,8 +18,22 @@ class HTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             length = int(self.headers['Content-Length'])
             with open(path, 'wb') as f:
                 f.write(self.rfile.read(length))
-            self.send_response(201, "Created")
-            self.end_headers()
+
+            image_type = imghdr.what(f.name)
+            if not image_type:
+                print("error")
+                ## If file exists, delete it ##
+                if os.path.isfile(f.name):
+                    os.remove(f.name)
+                    print("deleted file %s" % f.name)
+                else:    ## Show an error ##
+                    print("Error: %s file not found" % f.name)
+                self.send_response(405, "File type Rejected")
+                self.end_headers()
+            else:
+                print(image_type)
+                self.send_response(201, "Created")
+                self.end_headers()
             
 
 if __name__ == '__main__':
