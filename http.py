@@ -1,7 +1,6 @@
 import argparse
 import http.server
 import os
-import imghdr
 
 class HTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
     def do_PUT(self):
@@ -18,6 +17,7 @@ class HTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             with open(path, 'wb') as f:
                 f.write(self.rfile.read(length))
             self.send_response(201, "Created")
+            self.end_headers()
             
 
 if __name__ == '__main__':
