@@ -1,0 +1,4 @@
+[submodule "facedetect"]
+	path = facedetect
+	url = https://gitlab.com/wavexx/facedetect.git
+	branch = master

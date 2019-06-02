@@ -2,6 +2,9 @@ import argparse
 import http.server
 import os
 import imghdr
+import subprocess
+import sys
+import os
 
 
 class HTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
@@ -32,6 +35,9 @@ class HTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                 self.end_headers()
             else:
                 print(image_type)
+                dirname = os.path.dirname(__file__)
+                facedetectPath = os.path.join(dirname, "facedetect", "facedetect")
+                faceDetect = subprocess.run(["python", facedetectPath, f.name, "--biggest"], capture_output=True)
                 self.send_response(201, "Created")
                 self.end_headers()
             
